@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ressources/room.png</file>
+        <file>ressources/room_visited.png</file>
+        <file>ressources/player.png</file>
+        <file>ressources/pit.png</file>
+        <file>ressources/bat.png</file>
+        <file>ressources/bat_confirmed.png</file>
+        <file>ressources/wumpus.png</file>
+        <file>ressources/wumpus_confirmed.png</file>
+        <file>ressources/pit_confirmed.png</file>
+        <file>ressources/player_dragged.png</file>
+        <file>ressources/room_target.png</file>
+        <file>ressources/introduction.html</file>
+    </qresource>
+</RCC>
