@@ -39,7 +39,7 @@ public:
     void enter();
     void reset();
 
-    int remainingArrows() const;
+    [[nodiscard]] int remainingArrows() const;
 
 signals:
     void wumpusNear();

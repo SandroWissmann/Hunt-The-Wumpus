@@ -92,6 +92,14 @@ void Game::showDungeonHazards(bool value)
     mDungeon->showHazards(value);
 }
 
+void Game::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event)
+    // Hack because resizing in the constructor does not work
+    // (then the view is to small)
+    setFixedSize(size());
+}
+
 void Game::reset()
 {
     mAnnouncement.clear();

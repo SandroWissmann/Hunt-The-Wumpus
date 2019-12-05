@@ -155,6 +155,14 @@ void MainWindow::quitProgramm()
     QApplication::quit();
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event)
+    // Hack because resizing in the constructor does not work
+    // (then the view is to small)
+    setFixedSize(size());
+}
+
 void MainWindow::showDungeonHazards(bool value)
 {
     auto gameWidget = game();

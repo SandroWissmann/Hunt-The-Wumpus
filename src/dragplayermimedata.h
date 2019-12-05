@@ -29,10 +29,10 @@ class DragPlayerMimeData : public QMimeData
     Q_OBJECT
 public:
     void setRoom(Room *room);
-    Room *room() const;
+    [[nodiscard]] Room *room() const;
 
 private:
-    Room *mRoom;
+    Room *mRoom{};
 };
 
 #endif // DRAGPLAYERMIMEDATA_H

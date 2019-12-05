@@ -49,6 +49,9 @@ private slots:
 
     void quitProgramm();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     void showDungeonHazards(bool value);
 

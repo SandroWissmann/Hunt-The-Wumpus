@@ -34,34 +34,34 @@ public:
 
     void emitNeigbourHazards();
 
-    bool isEmpty() const;
+    [[nodiscard]] bool isEmpty() const;
 
     void setWumpus(bool value);
-    bool hasWumpus() const;
+    [[nodiscard]] bool hasWumpus() const;
 
     void setPit(bool value);
-    bool hasPit() const;
+    [[nodiscard]] bool hasPit() const;
 
     void setBat(bool value);
-    bool hasBat() const;
+    [[nodiscard]] bool hasBat() const;
 
     void setPlayer(bool value);
-    bool hasPlayer() const;
+    [[nodiscard]] bool hasPlayer() const;
 
     void setPlayerWasHere(bool value);
-    bool playerWasHere() const;
+    [[nodiscard]] bool playerWasHere() const;
 
     void setTarget(bool value);
-    bool isTarget() const;
+    [[nodiscard]] bool isTarget() const;
 
     void addNeighbour(Room *neighbour);
-    QVector<Room *> neighbours() const;
+    [[nodiscard]] QVector<Room *> neighbours() const;
 
     void showContent(bool value);
 
     void clear();
 
-    QRectF boundingRect() const override;
+    [[nodiscard]] QRectF boundingRect() const override;
 
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
@@ -69,7 +69,7 @@ public:
 
     enum { Type = UserType + 1 };
 
-    int type() const override;
+    [[nodiscard]] int type() const override;
 signals:
     void wumpusNear();
     void batNear();
@@ -115,17 +115,17 @@ private:
     void drawPit(QPainter *painter, const QImage &pitImage);
     void drawPlayer(QPainter *painter);
 
-    QImage roomImage() const;
-    QImage roomVisitedImage() const;
-    QImage roomTargetImage() const;
-    QImage batImage() const;
-    QImage batConfirmedImage() const;
-    QImage pitImage() const;
-    QImage pitConfirmedImage() const;
-    QImage wumpusImage() const;
-    QImage wumpusConfirmedImage() const;
-    QImage playerImage() const;
-    QImage playerDraggedImage() const;
+    [[nodiscard]] QImage roomImage() const;
+    [[nodiscard]] QImage roomVisitedImage() const;
+    [[nodiscard]] QImage roomTargetImage() const;
+    [[nodiscard]] QImage batImage() const;
+    [[nodiscard]] QImage batConfirmedImage() const;
+    [[nodiscard]] QImage pitImage() const;
+    [[nodiscard]] QImage pitConfirmedImage() const;
+    [[nodiscard]] QImage wumpusImage() const;
+    [[nodiscard]] QImage wumpusConfirmedImage() const;
+    [[nodiscard]] QImage playerImage() const;
+    [[nodiscard]] QImage playerDraggedImage() const;
 
     bool mBatConfirmed{ false };
 

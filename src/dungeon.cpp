@@ -38,8 +38,7 @@
 Dungeon::Dungeon(QWidget *parent)
     : QWidget(parent),
       mGraphicsScene{ new QGraphicsScene },
-    mDungeonView{ new DungeonView },
-    mRooms{}
+    mDungeonView{ new DungeonView }
 {
     createRooms();
     connectRoomsAsDodekaeder(mRooms);
@@ -231,10 +230,10 @@ void Dungeon::addLinesToScene()
 void Dungeon::addLineToNeigbours(const Room *room)
 {
     auto startPoint = room->mapToScene(room->rect().center());
-
+    constexpr auto lineWidth = 10;
     QPen pen;
     pen.setBrush(Qt::black);
-    pen.setWidth(10);
+    pen.setWidth(lineWidth);
 
     auto neighbours = room->neighbours();
 
@@ -257,10 +256,7 @@ void Dungeon::addLineToNeigbours(const Room *room)
 
 bool Dungeon::lineExistsInScene(const QLineF &line)
 {
-    if(findLineInScene(line)) {
-        return true;
-    }
-    return false;
+    return findLineInScene(line) != nullptr;
 }
 
 QGraphicsLineItem *Dungeon::findLineInScene(const QLineF &line)

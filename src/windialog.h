@@ -32,8 +32,12 @@ class WinDialog : public QDialog
 
 public:
     explicit WinDialog(QWidget *parent = nullptr);
-    ~WinDialog();
+    ~WinDialog() override;
 
+    WinDialog(const WinDialog&) = delete;
+    WinDialog(WinDialog&&) = delete;
+    WinDialog& operator=(const WinDialog&) = delete;
+    WinDialog& operator=(WinDialog&&) = delete;
 private:
     Ui::WinDialog *ui;
 };

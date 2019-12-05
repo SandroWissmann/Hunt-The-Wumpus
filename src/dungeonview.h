@@ -50,7 +50,7 @@ private:
     void startDragPlayerMode(QMouseEvent *event);
     void stopDragPlayerMode(QMouseEvent *event);
 
-    bool maxArrowRangeReached() const;
+    [[nodiscard]] bool maxArrowRangeReached() const;
     bool isMarked(Room *room) const;
     bool isNeigbourOfLastMarkedRoom(Room *room) const;
 

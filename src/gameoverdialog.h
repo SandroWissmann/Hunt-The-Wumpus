@@ -38,14 +38,19 @@ public:
     };
 
     explicit GameOverDialog(QWidget *parent = nullptr);
-    ~GameOverDialog();
+    ~GameOverDialog() override;
+
+    GameOverDialog(const GameOverDialog&) = delete;
+    GameOverDialog(GameOverDialog&&) = delete;
+    GameOverDialog& operator=(const GameOverDialog&) = delete;
+    GameOverDialog& operator=(GameOverDialog&&) = delete;
 
     void setReason(const Reason& reason);
 
 private:
-    QString playerKilledByWumpusText() const;
-    QString playerKilledByPitText() const;
-    QString playerOutOfArrowsText() const;
+    [[nodiscard]] QString playerKilledByWumpusText() const;
+    [[nodiscard]] QString playerKilledByPitText() const;
+    [[nodiscard]] QString playerOutOfArrowsText() const;
 
     Ui::GameOverDialog *ui;
 };

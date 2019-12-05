@@ -42,6 +42,9 @@ signals:
 
     void playerKilledWumpus();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 public slots:
     void reset();
 
@@ -65,7 +68,7 @@ private:
     Dungeon *mDungeon;
 
     static constexpr auto mCountOfArrows = 3;
-    int remainingArrows;
+    int remainingArrows{};
 };
 
 #endif // GAME_H
