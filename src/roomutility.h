@@ -22,8 +22,6 @@
 
 #include <QVector>
 
-#include <array>
-
 class Room;
 
 void connectRoomsAsDodekaeder(QVector<Room *> &rooms);

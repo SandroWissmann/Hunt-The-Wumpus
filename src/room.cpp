@@ -34,8 +34,6 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-#include <QDebug>
-
 Room::Room(QGraphicsItem *parent)
     : QGraphicsWidget(parent)
 {     
@@ -58,7 +56,8 @@ Room::Room(QGraphicsItem *parent)
 
     mGuessWumpusAction = new QAction{tr("Has &Wumpus")};
     mGuessWumpusAction->setCheckable(true);
-    connect(mGuessWumpusAction, &QAction::triggered, this, &Room::toggleGuessWumpus);
+    connect(mGuessWumpusAction, &QAction::triggered,
+            this, &Room::toggleGuessWumpus);
 
     mGuessBatAction = new QAction{tr("Has &Bat")};
     mGuessBatAction->setCheckable(true);
