@@ -38,16 +38,18 @@
 Dungeon::Dungeon(QWidget *parent)
     : QWidget(parent),
       mGraphicsScene{ new QGraphicsScene },
-    mDungeonView{ new DungeonView }
+    mDungeonView{ new DungeonView },
+    mRooms{ new Room, new Room, new Room, new Room, new Room,
+            new Room, new Room, new Room, new Room, new Room,
+            new Room, new Room, new Room, new Room, new Room,
+            new Room, new Room, new Room, new Room, new Room}
 {
-    createRooms();
-    connectRoomsAsDodekaeder(mRooms);
-    setPositionOfRooms(mRooms);
+    connectRoomsAsDodekaeder();
+    setPositionOfRooms();
     addRoomsToScene();
     addLinesToScene();
     connectToRooms();
-
-    populateRoomsRandom(mRooms, mCountOfPits, mCountOfBats);
+    populateRooms();
 
     mDungeonView->setScene(mGraphicsScene);
     mDungeonView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -102,7 +104,7 @@ void Dungeon::reset()
     hideDungeon();
     mRemainingArrows = mCountOfArrows;
 
-    populateRoomsRandom(mRooms, mCountOfPits, mCountOfBats);
+    populateRooms();
 }
 
 int Dungeon::remainingArrows() const
@@ -156,6 +158,95 @@ void Dungeon::decreaseArrows()
     }
 }
 
+void Dungeon::connectRoomsAsDodekaeder()
+{
+    auto makeNeighbours = [this](std::size_t src, std::array<std::size_t, 3> n){
+        for (const auto i: n) {
+            this->mRooms[src]->addNeighbour(this->mRooms[i]);
+        }
+    };
+
+    makeNeighbours(0, {1, 4, 19});
+    makeNeighbours(1, {0 , 2, 17});
+    makeNeighbours(2, {1 , 3, 15});
+    makeNeighbours(3, {2 , 4, 13});
+    makeNeighbours(4, {0 , 3, 5});
+    makeNeighbours(5, {4 , 6, 12});
+    makeNeighbours(6, {5 , 7, 19});
+    makeNeighbours(7, {6 , 8, 11});
+    makeNeighbours(8, {7 , 9, 18});
+    makeNeighbours(9, {8 , 10, 16});
+    makeNeighbours(10, {9 , 11, 14});
+    makeNeighbours(11, {7 , 10, 12});
+    makeNeighbours(12, {5 , 11, 13});
+    makeNeighbours(13, {3 , 12, 14});
+    makeNeighbours(14, {10 , 13, 15});
+    makeNeighbours(15, {2 , 14, 16});
+    makeNeighbours(16, {9 , 15, 17});
+    makeNeighbours(17, {1 , 16, 18});
+    makeNeighbours(18, {8 , 17, 19});
+    makeNeighbours(19, {0 , 6, 18});
+}
+
+void Dungeon::setPositionOfRooms()
+{
+    const auto roomWidth = static_cast<int>(mRooms[0]->size().width());
+    const auto roomHeight = static_cast<int>(mRooms[0]->size().height());
+
+    std::array<QPoint, mCountOfRooms> points
+    {
+        QPoint{ 400 - roomWidth / 2, 450 - roomHeight / 2},
+        QPoint{ 600 - roomWidth / 2, 450 - roomHeight / 2},
+        QPoint{ 600 - roomWidth / 2, 550 - roomHeight / 2},
+        QPoint{ 500 - roomWidth / 2, 600 - roomHeight / 2},
+        QPoint{ 400 - roomWidth / 2, 550 - roomHeight / 2},
+        QPoint{ 250 - roomWidth / 2, 600 - roomHeight / 2},
+        QPoint{ 250 - roomWidth / 2, 450 - roomHeight / 2},
+        QPoint{ 100 - roomWidth / 2, 300 - roomHeight / 2},
+        QPoint{ 500 - roomWidth / 2, 75 - roomHeight / 2},
+        QPoint{ 900 - roomWidth / 2, 300 - roomHeight / 2},
+        QPoint{ 900 - roomWidth / 2, 900 - roomHeight / 2},
+        QPoint{ 100 - roomWidth / 2, 900 - roomHeight / 2},
+        QPoint{ 300 - roomWidth / 2, 750 - roomHeight / 2},
+        QPoint{ 500 - roomWidth / 2, 750 - roomHeight / 2},
+        QPoint{ 750 - roomWidth / 2, 750 - roomHeight / 2},
+        QPoint{ 750 - roomWidth / 2, 600 - roomHeight / 2},
+        QPoint{ 800 - roomWidth / 2, 450 - roomHeight / 2},
+        QPoint{ 700 - roomWidth / 2, 300 - roomHeight / 2},
+        QPoint{ 500 - roomWidth / 2, 200 - roomHeight / 2},
+        QPoint{ 350 - roomWidth / 2, 300 - roomHeight / 2},
+    };
+
+    Q_ASSERT(points.size() == mRooms.size());
+
+    std::size_t i{0};
+    for(auto &room : mRooms) {
+        room->setPos(points[i++]);
+    }
+}
+
+void Dungeon::populateRooms()
+{
+    // create a temporary array of room pointers
+    std::array<Room *, mCountOfRooms> mixer;
+    std::size_t i{ 0 };
+    for (auto &r : mRooms) {
+        mixer[i++] = r;
+    }
+
+    std::random_shuffle(mixer.begin(), mixer.end());
+    auto it{ mixer.begin() };
+
+    (*it++)->setWumpus(true);
+
+    for (int bats{ mCountOfBats }; bats; --bats) {
+        (*it++)->setBat(true);
+    }
+    for (int pits{ mCountOfPits }; pits; --pits) {
+        (*it++)->setPit(true);
+    }
+}
+
 void Dungeon::scaleViewToSize()
 {
     mDungeonView->fitInView(mDungeonView->scene()->sceneRect(),
@@ -178,14 +269,14 @@ void Dungeon::hideDungeon()
     }
 }
 
-void Dungeon::createRooms()
-{
-    mRooms.reserve(mCountOfRooms);
+//void Dungeon::createRooms()
+//{
+//    mRooms.reserve(mCountOfRooms);
 
-    for(int i = 0; i< mCountOfRooms; ++i) {
-        mRooms.push_back(new Room);
-    }
-}
+//    for(int i = 0; i< mCountOfRooms; ++i) {
+//        mRooms.push_back(new Room);
+//    }
+//}
 
 void Dungeon::connectToRooms()
 {

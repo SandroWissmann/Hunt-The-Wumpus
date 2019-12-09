@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+#include <array>
+
 class Room;
 
 class QGraphicsScene;
@@ -63,11 +65,15 @@ private slots:
     void decreaseArrows();
 
 private:
+    void connectRoomsAsDodekaeder();
+    void setPositionOfRooms();
+    void populateRooms();
+
     void scaleViewToSize();
 
     void emptyRooms();
     void hideDungeon();
-    void createRooms();
+//    void createRooms();
     void connectToRooms();
     void addRoomsToScene();
 
@@ -87,7 +93,7 @@ private:
 
     QGraphicsScene *mGraphicsScene;
     DungeonView *mDungeonView;
-    QVector<Room *> mRooms;
+    std::array<Room *, mCountOfRooms> mRooms;
 };
 
 
