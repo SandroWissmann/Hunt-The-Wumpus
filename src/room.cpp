@@ -56,16 +56,15 @@ Room::Room(QGraphicsItem *parent)
 
     mGuessWumpusAction = new QAction{tr("Has &Wumpus")};
     mGuessWumpusAction->setCheckable(true);
-    connect(mGuessWumpusAction, &QAction::triggered,
-            this, &Room::toggleGuessWumpus);
+    connect(mGuessWumpusAction, &QAction::triggered, this, &Room::selfUpdate);
 
     mGuessBatAction = new QAction{tr("Has &Bat")};
     mGuessBatAction->setCheckable(true);
-    connect(mGuessBatAction, &QAction::triggered, this, &Room::toggleGuessBat);
+    connect(mGuessBatAction, &QAction::triggered, this, &Room::selfUpdate);
 
     mGuessPitAction = new QAction{tr("Has &Pit")};
     mGuessPitAction->setCheckable(true);
-    connect(mGuessPitAction, &QAction::triggered, this, &Room::toggleGuessPit);
+    connect(mGuessPitAction, &QAction::triggered, this, &Room::selfUpdate);
 
     addAction(mGuessWumpusAction);
     addAction(mGuessBatAction);
@@ -206,10 +205,6 @@ void Room::clear()
     mHasPlayer = false;
     mPlayerWasHere = false;
 
-    mGuessWumpus = false;
-    mGuessBat = false;
-    mGuessPit = false;
-
     mShowContent = false;
 
     mIsTarget = false;
@@ -222,9 +217,7 @@ void Room::clear()
 
 QRectF Room::boundingRect() const
 {
-    return QRectF{ 0, 0,
-        static_cast<qreal>(roomImage().width()),
-        static_cast<qreal>(roomImage().height())};
+    return roomImage().rect();
 }
 
 void Room::paint(
@@ -251,29 +244,10 @@ void Room::paint(
     }
 
     if (mShowContent) {
-        if (hasWumpus()) {
-            drawWumpus(painter, wumpusConfirmedImage());
-        }
-        if (hasBat()) {
-            drawBat(painter, batConfirmedImage());
-        }
-        if (hasPit()) {
-            drawPit(painter, pitConfirmedImage());
-        }
+        drawAllContent(painter);
     }
     else {
-        if (mGuessWumpus) {
-            drawWumpus(painter, wumpusImage());
-        }
-        if (mBatConfirmed) {
-            drawBat(painter, batConfirmedImage());
-        }
-        else if (mGuessBat) {
-            drawBat(painter, batImage());
-        }
-        if (mGuessPit) {
-            drawPit(painter, pitImage());
-        }
+        drawGuessedContent(painter);
     }
 }
 
@@ -385,24 +359,8 @@ void Room::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }
 
-void Room::toggleGuessWumpus()
+void Room::selfUpdate()
 {
-    mGuessWumpus = !mGuessWumpus;
-    mGuessWumpusAction->setChecked(mGuessWumpus);
-    update();
-}
-
-void Room::toggleGuessPit()
-{
-    mGuessPit = !mGuessPit;
-    mGuessPitAction->setChecked(mGuessPit);
-    update();
-}
-
-void Room::toggleGuessBat()
-{
-    mGuessBat = !mGuessBat;
-    mGuessBatAction->setChecked(mGuessBat);
     update();
 }
 
@@ -453,6 +411,35 @@ bool Room::isPlayerDrag(QGraphicsSceneDragDropEvent *event)
 {
     return qobject_cast<const DragPlayerMimeData *>(event->mimeData()) &&
             event->mimeData()->imageData() == playerDraggedImage();
+}
+
+void Room::drawAllContent(QPainter *painter)
+{
+    if (hasWumpus()) {
+        drawWumpus(painter, wumpusConfirmedImage());
+    }
+    if (hasBat()) {
+        drawBat(painter, batConfirmedImage());
+    }
+    if (hasPit()) {
+        drawPit(painter, pitConfirmedImage());
+    }
+}
+
+void Room::drawGuessedContent(QPainter *painter)
+{
+    if (mGuessWumpusAction->isChecked()) {
+        drawWumpus(painter, wumpusImage());
+    }
+    if (mBatConfirmed) {
+        drawBat(painter, batConfirmedImage());
+    }
+    else if (mGuessBatAction->isChecked()) {
+        drawBat(painter, batImage());
+    }
+    if (mGuessPitAction->isChecked()) {
+        drawPit(painter, pitImage());
+    }
 }
 
 void Room::drawRoom(QPainter *painter, const QImage &roomImage)

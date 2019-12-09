@@ -96,9 +96,7 @@ protected:
     void dropEvent(QGraphicsSceneDragDropEvent *event) override;
 
 private slots:
-    void toggleGuessWumpus();
-    void toggleGuessPit();
-    void toggleGuessBat();
+    void selfUpdate();
 
 private:
     bool isNeighbour(Room *room) const;
@@ -108,6 +106,9 @@ private:
     void executePlayerDrag(QGraphicsSceneMouseEvent *event);
 
     bool isPlayerDrag(QGraphicsSceneDragDropEvent *event);
+
+    void drawAllContent(QPainter *painter);
+    void drawGuessedContent(QPainter *painter);
 
     void drawRoom(QPainter *painter, const QImage &roomImage);
     void drawWumpus(QPainter *painter, const QImage &wumpusImage);
@@ -134,10 +135,6 @@ private:
     bool mHasBat{ false };
     bool mHasPlayer{ false };
     bool mPlayerWasHere{ false };
-
-    bool mGuessWumpus{ false };
-    bool mGuessBat{ false };
-    bool mGuessPit{ false };
 
     bool mShowContent{ false };
 
