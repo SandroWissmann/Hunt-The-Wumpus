@@ -54,15 +54,15 @@ Room::Room(QGraphicsItem *parent)
 
     setAcceptDrops(true);
 
-    mGuessWumpusAction = new QAction{tr("Has &Wumpus")};
+    mGuessWumpusAction = new QAction{tr("Has &Wumpus"), this};
     mGuessWumpusAction->setCheckable(true);
     connect(mGuessWumpusAction, &QAction::triggered, this, &Room::selfUpdate);
 
-    mGuessBatAction = new QAction{tr("Has &Bat")};
+    mGuessBatAction = new QAction{tr("Has &Bat"), this};
     mGuessBatAction->setCheckable(true);
     connect(mGuessBatAction, &QAction::triggered, this, &Room::selfUpdate);
 
-    mGuessPitAction = new QAction{tr("Has &Pit")};
+    mGuessPitAction = new QAction{tr("Has &Pit"), this};
     mGuessPitAction->setCheckable(true);
     connect(mGuessPitAction, &QAction::triggered, this, &Room::selfUpdate);
 
