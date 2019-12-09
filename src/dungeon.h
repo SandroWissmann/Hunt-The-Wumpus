@@ -22,8 +22,6 @@
 
 #include <QWidget>
 
-#include <array>
-
 class Room;
 
 class QGraphicsScene;
@@ -67,17 +65,16 @@ private slots:
 private:
     void connectRoomsAsDodekaeder();
     void setPositionOfRooms();
+    void addRoomsToScene();
+    void addLinesToScene();
+    void connectToRooms();
     void populateRooms();
 
     void scaleViewToSize();
 
     void emptyRooms();
     void hideDungeon();
-//    void createRooms();
-    void connectToRooms();
-    void addRoomsToScene();
 
-    void addLinesToScene();
 
 
     void addLineToNeigbours(const Room *room);

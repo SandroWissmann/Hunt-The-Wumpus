@@ -26,8 +26,6 @@
 #include <QVBoxLayout>
 #include <QFontMetrics>
 
-#include <QDebug>
-
 Game::Game(QWidget *parent)
     : QWidget(parent),
       mAnnouncement{},

@@ -22,7 +22,6 @@
 #include "dungeonview.h"
 
 #include "room.h"
-#include "roomutility.h"
 
 #include <QGuiApplication>
 #include <QGraphicsScene>
@@ -30,8 +29,6 @@
 #include <QRandomGenerator>
 #include <QScreen>
 #include <QVBoxLayout>
-
-#include <QDebug>
 
 #include <algorithm>
 
@@ -89,7 +86,8 @@ void Dungeon::showHazards(bool value)
 void Dungeon::enter()
 {
     for (;;) {
-        auto idx = QRandomGenerator::global()->bounded(0, mRooms.size() - 1);
+        auto idx = static_cast<std::size_t>(QRandomGenerator::global()->bounded(
+                    0, static_cast<int>(mRooms.size()) - 1));
 
         if(mRooms[idx]->isEmpty()) {
             mRooms[idx]->enter();
@@ -225,9 +223,50 @@ void Dungeon::setPositionOfRooms()
     }
 }
 
+void Dungeon::addRoomsToScene()
+{
+    for(const auto &room : mRooms) {
+        mGraphicsScene->addItem(room);
+    }
+}
+
+void Dungeon::addLinesToScene()
+{
+    for (const auto& room : mRooms) {
+        addLineToNeigbours(room);
+    }
+}
+
+void Dungeon::connectToRooms()
+{
+    for(const auto &room : mRooms) {
+        connect(room, &Room::entered,
+                this, &Dungeon::showLinesToNeigboursOfRoom);
+        connect(room, &Room::entered,
+                this, &Dungeon::enteredRoom);
+
+        connect(room, &Room::wumpusNear,
+                this, &Dungeon::wumpusNear);
+        connect(room, &Room::batNear,
+                this, &Dungeon::batNear);
+        connect(room, &Room::pitNear,
+                this, &Dungeon::pitNear);
+
+        connect(room, &Room::playerDiedFromWumpus,
+                this, &Dungeon::playerDiedFromWumpus);
+        connect(room, &Room::playerDiedFromPit,
+                this, &Dungeon::playerDiedFromPit);
+        connect(room, &Room::playerDraggedByBat,
+                this, &Dungeon::playerDraggedByBat);
+        connect(room, &Room::playerDraggedByBat,
+                this, &Dungeon::enter);
+    }
+}
+
 void Dungeon::populateRooms()
 {
-    // create a temporary array of room pointers
+    // create a temporary array of room pointers. We cannot shuffle directly
+    // the rooms because they are connected with the neighbours already
     std::array<Room *, mCountOfRooms> mixer;
     std::size_t i{ 0 };
     for (auto &r : mRooms) {
@@ -269,54 +308,7 @@ void Dungeon::hideDungeon()
     }
 }
 
-//void Dungeon::createRooms()
-//{
-//    mRooms.reserve(mCountOfRooms);
 
-//    for(int i = 0; i< mCountOfRooms; ++i) {
-//        mRooms.push_back(new Room);
-//    }
-//}
-
-void Dungeon::connectToRooms()
-{
-    for(const auto &room : mRooms) {
-        connect(room, &Room::entered,
-                this, &Dungeon::showLinesToNeigboursOfRoom);
-        connect(room, &Room::entered,
-                this, &Dungeon::enteredRoom);
-
-        connect(room, &Room::wumpusNear,
-                this, &Dungeon::wumpusNear);
-        connect(room, &Room::batNear,
-                this, &Dungeon::batNear);
-        connect(room, &Room::pitNear,
-                this, &Dungeon::pitNear);
-
-        connect(room, &Room::playerDiedFromWumpus,
-                this, &Dungeon::playerDiedFromWumpus);
-        connect(room, &Room::playerDiedFromPit,
-                this, &Dungeon::playerDiedFromPit);
-        connect(room, &Room::playerDraggedByBat,
-                this, &Dungeon::playerDraggedByBat);
-        connect(room, &Room::playerDraggedByBat,
-                this, &Dungeon::enter);
-    }
-}
-
-void Dungeon::addRoomsToScene()
-{
-    for(const auto &room : mRooms) {
-        mGraphicsScene->addItem(room);
-    }
-}
-
-void Dungeon::addLinesToScene()
-{
-    for (const auto& room : mRooms) {
-        addLineToNeigbours(room);
-    }
-}
 
 void Dungeon::addLineToNeigbours(const Room *room)
 {

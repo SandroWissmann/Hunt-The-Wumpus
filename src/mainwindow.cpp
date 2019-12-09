@@ -30,8 +30,6 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 
-#include <QDebug>
-
 MainWindow::MainWindow(QWidget *parent)
     : QWidget{ parent },
       mStackedWidget{ new QStackedWidget }

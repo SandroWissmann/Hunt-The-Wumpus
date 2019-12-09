@@ -21,7 +21,6 @@
 
 #include "room.h"
 
-#include <QDebug>
 #include <QMouseEvent>
 
 #include <algorithm>
