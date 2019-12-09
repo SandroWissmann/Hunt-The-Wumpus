@@ -213,6 +213,11 @@ void Room::clear()
     mShowContent = false;
 
     mIsTarget = false;
+
+    mGuessPitAction->setChecked(false);
+    mGuessWumpusAction->setChecked(false);
+    mGuessBatAction->setChecked(false);
+    mGuessBatAction->setEnabled(true);
 }
 
 QRectF Room::boundingRect() const
@@ -382,40 +387,22 @@ void Room::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Room::toggleGuessWumpus()
 {
-    if(mGuessWumpus) {
-        mGuessWumpus = false;
-        mGuessWumpusAction->setChecked(false);
-    }
-    else {
-        mGuessWumpus = true;
-        mGuessWumpusAction->setChecked(true);
-    }
+    mGuessWumpus = !mGuessWumpus;
+    mGuessWumpusAction->setChecked(mGuessWumpus);
     update();
 }
 
 void Room::toggleGuessPit()
 {
-    if(mGuessPit) {
-        mGuessPit = false;
-        mGuessPitAction->setChecked(false);
-    }
-    else {
-        mGuessPit = true;
-        mGuessPitAction->setChecked(true);
-    }
+    mGuessPit = !mGuessPit;
+    mGuessPitAction->setChecked(mGuessPit);
     update();
 }
 
 void Room::toggleGuessBat()
 {
-    if(mGuessBat) {
-        mGuessBat = false;
-        mGuessBatAction->setChecked(false);
-    }
-    else {
-        mGuessBat = true;
-        mGuessBatAction->setChecked(true);
-    }
+    mGuessBat = !mGuessBat;
+    mGuessBatAction->setChecked(mGuessBat);
     update();
 }
 
