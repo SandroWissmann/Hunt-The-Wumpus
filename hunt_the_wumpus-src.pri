@@ -7,7 +7,6 @@ SOURCES += \
     ../src/game.cpp \
     ../src/dragplayermimedata.cpp \
     ../src/room.cpp \
-    ../src/roomutility.cpp \
     ../src/dungeon.cpp
 
 HEADERS += \
@@ -19,7 +18,6 @@ HEADERS += \
     ../src/game.h \
     ../src/dragplayermimedata.h \
     ../src/room.h \
-    ../src/roomutility.h \
     ../src/dungeon.h
 
 FORMS += \
