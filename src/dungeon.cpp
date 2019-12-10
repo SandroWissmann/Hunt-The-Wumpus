@@ -35,11 +35,7 @@
 Dungeon::Dungeon(QWidget *parent)
     : QWidget(parent),
       mGraphicsScene{ new QGraphicsScene },
-    mDungeonView{ new DungeonView },
-    mRooms{ new Room, new Room, new Room, new Room, new Room,
-            new Room, new Room, new Room, new Room, new Room,
-            new Room, new Room, new Room, new Room, new Room,
-            new Room, new Room, new Room, new Room, new Room}
+    mDungeonView{ new DungeonView }
 {
     connectRoomsAsDodekaeder();
     setPositionOfRooms();
@@ -79,7 +75,7 @@ Dungeon::Dungeon(QWidget *parent)
 void Dungeon::showHazards(bool value)
 {
     for(auto &room : mRooms) {
-        room->showContent(value);
+        room.showContent(value);
     }
 }
 
@@ -89,8 +85,8 @@ void Dungeon::enter()
         auto idx = static_cast<std::size_t>(QRandomGenerator::global()->bounded(
                     0, static_cast<int>(mRooms.size()) - 1));
 
-        if(mRooms[idx]->isEmpty()) {
-            mRooms[idx]->enter();
+        if(mRooms[idx].isEmpty()) {
+            mRooms[idx].enter();
             break;
         }
     }
@@ -119,16 +115,16 @@ void Dungeon::moveWumpusIfWakeUp()
     }
 
     auto wumpusRoomIt{ std::find_if(mRooms.begin(), mRooms.end(),
-                        [](Room *room) { return room->hasWumpus(); }) };
+                        [](Room &room) { return room.hasWumpus(); }) };
 
-    (*wumpusRoomIt)->setWumpus(false);
-    auto newRoom = (*wumpusRoomIt)->neighbours()[direction];
+    (*wumpusRoomIt).setWumpus(false);
+    auto newRoom = (*wumpusRoomIt).neighbours()[direction];
     newRoom->setWumpus(true);
 
     auto playerRoomIt{ std::find_if(mRooms.begin(), mRooms.end(),
-                        [](Room *room) { return room->hasPlayer(); }) };
+                        [](Room &room) { return room.hasPlayer(); }) };
 
-    (*playerRoomIt)->emitNeigbourHazards();
+    (*playerRoomIt).emitNeigbourHazards();
 }
 
 void Dungeon::showLinesToNeigboursOfRoom()
@@ -160,7 +156,7 @@ void Dungeon::connectRoomsAsDodekaeder()
 {
     auto makeNeighbours = [this](std::size_t src, std::array<std::size_t, 3> n){
         for (const auto i: n) {
-            this->mRooms[src]->addNeighbour(this->mRooms[i]);
+            this->mRooms[src].addNeighbour(&(this->mRooms[i]));
         }
     };
 
@@ -188,8 +184,8 @@ void Dungeon::connectRoomsAsDodekaeder()
 
 void Dungeon::setPositionOfRooms()
 {
-    const auto roomWidth = static_cast<int>(mRooms[0]->size().width());
-    const auto roomHeight = static_cast<int>(mRooms[0]->size().height());
+    const auto roomWidth = static_cast<int>(mRooms[0].size().width());
+    const auto roomHeight = static_cast<int>(mRooms[0].size().height());
 
     std::array<QPoint, mCountOfRooms> points
     {
@@ -219,46 +215,46 @@ void Dungeon::setPositionOfRooms()
 
     std::size_t i{0};
     for(auto &room : mRooms) {
-        room->setPos(points[i++]);
+        room.setPos(points[i++]);
     }
 }
 
 void Dungeon::addRoomsToScene()
 {
-    for(const auto &room : mRooms) {
-        mGraphicsScene->addItem(room);
+    for(auto &room : mRooms) {
+        mGraphicsScene->addItem(&room);
     }
 }
 
 void Dungeon::addLinesToScene()
 {
     for (const auto& room : mRooms) {
-        addLineToNeigbours(room);
+        addLineToNeigbours(&room);
     }
 }
 
 void Dungeon::connectToRooms()
 {
     for(const auto &room : mRooms) {
-        connect(room, &Room::entered,
+        connect(&room, &Room::entered,
                 this, &Dungeon::showLinesToNeigboursOfRoom);
-        connect(room, &Room::entered,
+        connect(&room, &Room::entered,
                 this, &Dungeon::enteredRoom);
 
-        connect(room, &Room::wumpusNear,
+        connect(&room, &Room::wumpusNear,
                 this, &Dungeon::wumpusNear);
-        connect(room, &Room::batNear,
+        connect(&room, &Room::batNear,
                 this, &Dungeon::batNear);
-        connect(room, &Room::pitNear,
+        connect(&room, &Room::pitNear,
                 this, &Dungeon::pitNear);
 
-        connect(room, &Room::playerDiedFromWumpus,
+        connect(&room, &Room::playerDiedFromWumpus,
                 this, &Dungeon::playerDiedFromWumpus);
-        connect(room, &Room::playerDiedFromPit,
+        connect(&room, &Room::playerDiedFromPit,
                 this, &Dungeon::playerDiedFromPit);
-        connect(room, &Room::playerDraggedByBat,
+        connect(&room, &Room::playerDraggedByBat,
                 this, &Dungeon::playerDraggedByBat);
-        connect(room, &Room::playerDraggedByBat,
+        connect(&room, &Room::playerDraggedByBat,
                 this, &Dungeon::enter);
     }
 }
@@ -270,7 +266,7 @@ void Dungeon::populateRooms()
     std::array<Room *, mCountOfRooms> mixer;
     std::size_t i{ 0 };
     for (auto &r : mRooms) {
-        mixer[i++] = r;
+        mixer[i++] = &r;
     }
 
     std::random_shuffle(mixer.begin(), mixer.end());
@@ -294,8 +290,8 @@ void Dungeon::scaleViewToSize()
 
 void Dungeon::emptyRooms()
 {
-    for(auto room : mRooms) {
-        room->clear();
+    for(auto &room : mRooms) {
+        room.clear();
     }
 }
 

@@ -20,9 +20,8 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 
+#include "room.h"
 #include <QWidget>
-
-class Room;
 
 class QGraphicsScene;
 class QGraphicsLineItem;
@@ -90,7 +89,7 @@ private:
 
     QGraphicsScene *mGraphicsScene;
     DungeonView *mDungeonView;
-    std::array<Room *, mCountOfRooms> mRooms;
+    std::array<Room , mCountOfRooms> mRooms;
 };
 
 
