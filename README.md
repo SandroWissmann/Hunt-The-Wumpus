@@ -11,3 +11,6 @@
 * QT >= 5.13 
   * You can download QT [here](https://www.qt.io/download). The game was developed under QT Creator
 
+## License
+
+This project is licensed under the GPL3 License - see the [LICENSE.md](LICENSE.md) file for details
