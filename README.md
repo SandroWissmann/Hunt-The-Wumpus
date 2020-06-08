@@ -4,7 +4,7 @@
 
 ## About
 
-* Cross-Platform GUI-Implementation of the originaly text based game [Hunt The Wumpus](https://en.wikipedia.org/wiki/Hunt_the_Wumpus)
+* Cross-Platform GUI-Implementation of the originally text based game [Hunt The Wumpus](https://en.wikipedia.org/wiki/Hunt_the_Wumpus)
 
 ## Dependencies for Running Locally
 
