@@ -8,8 +8,8 @@
 
 ## Dependencies for Running Locally
 
-* QT >= 5.13 
-  * You can download QT [here](https://www.qt.io/download). The game was developed under QT Creator
+* Qt >= 5.13 
+  * You can download QT [here](https://www.qt.io/download). The game was developed under Qt Creator
 
 ## License
 
